@@ -1,4 +1,4 @@
-package main;
+package main.services;
 
 import models.Article;
 import org.springframework.stereotype.Service;
