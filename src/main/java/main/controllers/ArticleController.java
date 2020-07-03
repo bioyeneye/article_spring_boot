@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ArticleController {
@@ -19,7 +20,7 @@ public class ArticleController {
     }
 
     @RequestMapping("/articles/{id}")
-    public Article getArticle(@PathVariable String id) {
+    public Article getArticle(@PathVariable(required = true) String id) {
         return articleService.getArticle(id);
     }
 
@@ -37,4 +38,17 @@ public class ArticleController {
     public void deleteArticle(@PathVariable String id) {
         this.articleService.deleteArticle(id);
     }
+
+    //http://localhost:3002/?articleId=2
+    @GetMapping
+    public List<Article> getAllArticle(@RequestParam(required = false) String articleId) {
+        if (articleId != null) {
+            return articleService.getArticleList().stream()
+                    .filter(order -> articleId.equals(order.getId()))
+                    .collect(Collectors.toList());
+        }
+
+        return articleService.getArticleList();
+    }
 }
+
